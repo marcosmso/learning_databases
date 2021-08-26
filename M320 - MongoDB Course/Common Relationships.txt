@@ -1,0 +1,54 @@
+Common Relationships
+Numeral Notation = [min, likely, max]
+
+#### ONE-TO-ONE
+Tip 1: Prefer embedding for simplicity;
+Tip 2: Use subdocuments to organize the fields;
+Tip 3: Use a reference for optimization purposes.
+
+Customers
+- name
+- customer_id
+- Address (subdocument)
+  - street
+  - number
+  - country
+
+#### ONE-TO-MANY
+Tip 1: Embed in the side of the most queried collection;
+Tip 2: Prefer referencing when the associated documents are not always needed with the most often queried documents;
+
+Items ----< Reviews
+Solution: Embed top reviews documents [0, 20] in Item document;
+
+Address ----< Orders
+Solution: Embbed Address Document in each Document Order;
+
+Zips ----< Stores
+Solution: Reference stores in a array inside Zip document;
+
+Zips ----< Stores
+Solution: Reference Zip in each store document;
+
+#### MANY-TO-MANY
+Tip 1: Embed in the side of the most queried collection
+Tip 2: Prefer embedding for information that is primarily static over time and may profit for duplication
+Tip 3: Prefer referencing to avoid managing duplication.
+
+invoices >----< products
+stores   >----< items (products)
+actors   >----< movies
+carts >---<items
+
+Cart is more queried than items
+Embed items documents in a array [0,1,1000] inside cart document
+OR
+Keep array of references of items inside Cart document
+
+#### ONE-TO-ZILLIONS
+A famous person and her twitter followers
+
+Tip 1: use reference in the many/zillions side (only avaiable representation)
+
+items ----<<< items_views [0,10k,100k]
+Reference item document inside item_view document
